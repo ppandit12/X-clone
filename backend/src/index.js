@@ -15,11 +15,22 @@ app.use(clerkMiddleware());
 app.use("/api/users",userRouter);
 app.use("/api/posts",PostRouter);
 
-app.use((err,req,res,next)=>{
-    console.log("error handling",err);
-    res.status(500).json({error: err.message || "Internal server error"});
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  const status = err.statusCode || err.status || 500;
+  const message =
+    process.env.NODE_ENV === "production"
+      ? "Internal server error"
+      : (err.message || "Internal server error");
+  console.error("Unhandled error", {
+    method: req.method,
+    path: req.path,
+    userId: req.auth?.userId,
+    status,
+    err,
+  });
+  res.status(status).json({ error: message });
 });
-
 
 const connect = async ()=>{
     try {

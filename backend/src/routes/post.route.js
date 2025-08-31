@@ -12,7 +12,6 @@ PostRouter.get("/user/:userId", getUserPosts);
 
 PostRouter.post("/",protectedRoute,upload.single("image"), createPost);
 PostRouter.delete("/:postId", protectedRoute,deletePost);
-PostRouter.post("/postId/like",protectedRoute,likePost);
-
+ PostRouter.post("/:postId/likes", protectedRoute, likePost);
 
 export default PostRouter;
