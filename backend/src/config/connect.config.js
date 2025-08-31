@@ -3,7 +3,7 @@ import env from "./env.config.js";
 
 export const connectDB = async ()=>{
     try {
-        console.log("inside the connectDB:", env);
+        // console.log("inside the connectDB:", env);
       const connection = await mongoose.connect(env.mongodbUri, {
             useNewUrlParser: true,
             useUnifiedTopology: true,

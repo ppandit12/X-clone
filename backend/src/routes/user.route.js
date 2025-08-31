@@ -3,15 +3,15 @@ import { followUser, getCurrentUser, getUserProfile,syncUser,updateProfile} from
 import {protectedRoute } from "../middleware/auth.middleware.js";
 
 
-const router = Router();
+const userRouter = Router();
 
-router.get("/profile/:username",getUserProfile);
+userRouter.get("/profile/:username",getUserProfile);
 
-router.get("/me",protectedRoute,getCurrentUser);
-router.post("/sync",protectedRoute,syncUser);
-router.put("/profile",protectedRoute,updateProfile);
-router.post("/follow/:targetId",protectedRoute,followUser);
+userRouter.get("/me",protectedRoute,getCurrentUser);
+userRouter.post("/sync",protectedRoute,syncUser);
+userRouter.put("/profile",protectedRoute,updateProfile);
+userRouter.post("/follow/:targetId",protectedRoute,followUser);
 
 
 
-export default router;
+export default userRouter;

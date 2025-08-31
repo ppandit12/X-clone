@@ -3,7 +3,8 @@ import { connectDB } from "./config/connect.config.js";
 import env from "./config/env.config.js";
 import { clerkMiddleware } from '@clerk/express';
 import cors from "cors";
-import router from "./routes/user.route.js";
+import userRouter from "./routes/user.route.js";
+import PostRouter from "./routes/post.route.js";
 
 
 const app = express();
@@ -11,7 +12,13 @@ app.use(cors());
 app.use(express.json());
 app.use(clerkMiddleware());
 
-app.use("/api/users",router)
+app.use("/api/users",userRouter);
+app.use("/api/posts",PostRouter);
+
+app.use((err,req,res,next)=>{
+    console.log("error handling",err);
+    res.status(500).json({error: err.message || "Internal server error"});
+});
 
 
 const connect = async ()=>{
