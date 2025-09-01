@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { clerkMiddleware } from '@clerk/express';
+import serverless from 'serverless-http';
 import { connectDB } from "./config/connect.config.js";
 import env from "./config/env.config.js";
 import userRouter from "./routes/user.route.js";
@@ -59,4 +60,4 @@ connect();
 
 
 
-export default app;
+export default serverless(app);
