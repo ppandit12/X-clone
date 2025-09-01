@@ -60,4 +60,4 @@ connect();
 
 
 
-export default serverless(app);
+export default app;
