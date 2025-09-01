@@ -67,4 +67,5 @@ const handler = serverless(async (req, res) => {
   return app(req, res);
 });
 
-export default handler;
+export { handler };        // For Vercel
+export default app; 
