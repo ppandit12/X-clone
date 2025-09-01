@@ -10,22 +10,25 @@ import commentRouter from "./routes/comment.route.js";
 import notificationRouter from "./routes/notification.route.js";
 import { arcjetMiddleware } from "./middleware/arcjet.middleware.js";
 
-
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(clerkMiddleware());
 app.use(arcjetMiddleware);
 
-app.use("/api/users",userRouter);
-app.use("/api/posts",PostRouter);
-app.use("/api/comments",commentRouter);
-app.use("/api/notifications",notificationRouter);
+// Routes
+app.use("/api/users", userRouter);
+app.use("/api/posts", PostRouter);
+app.use("/api/comments", commentRouter);
+app.use("/api/notifications", notificationRouter);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+  res.send('Hello from Vercel Express API!');
+});
 
+// Error handler
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
   const status = err.statusCode || err.status || 500;
@@ -43,21 +46,25 @@ app.use((err, req, res, next) => {
   res.status(status).json({ error: message });
 });
 
-const connect = async ()=>{
+// Connect DB before handling any request
+let serverReady = false;
+const setup = async () => {
+  if (!serverReady) {
     try {
-        connectDB();
-        if(env.nodeEnv !== "production"){
-           app.listen(env.port, () => {
-            console.log(`Server is running on port ${env.port}`);
-        });
-        }
-    } catch (error) {
-        console.error("error while connecting to database:", error);
+      await connectDB();
+      serverReady = true;
+      console.log("✅ DB connected (serverless)");
+    } catch (err) {
+      console.error("❌ Failed to connect to DB:", err);
+      throw err;
     }
-}
+  }
+};
 
-connect();
+// Wrap with serverless-http and connect DB
+const handler = serverless(async (req, res) => {
+  await setup();
+  return app(req, res);
+});
 
-
-
-export default app;
+export default handler;
