@@ -14,6 +14,7 @@ const env = {
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
   arcjetKey: process.env.ARCJET_KEY,
+  debug:process.env.DEBUG_CLOUDINARY
 };
 
 

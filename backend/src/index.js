@@ -1,10 +1,11 @@
 import express from "express";
+import cors from "cors";
+import { clerkMiddleware } from '@clerk/express';
 import { connectDB } from "./config/connect.config.js";
 import env from "./config/env.config.js";
-import { clerkMiddleware } from '@clerk/express';
-import cors from "cors";
 import userRouter from "./routes/user.route.js";
 import PostRouter from "./routes/post.route.js";
+import commentRouter from "./routes/comment.route.js";
 
 
 const app = express();
@@ -14,12 +15,13 @@ app.use(clerkMiddleware());
 
 app.use("/api/users",userRouter);
 app.use("/api/posts",PostRouter);
+app.use("/api/comments",commentRouter)
 
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
   const status = err.statusCode || err.status || 500;
   const message =
-    process.env.NODE_ENV === "production"
+    env.nodeEnv === "production"
       ? "Internal server error"
       : (err.message || "Internal server error");
   console.error("Unhandled error", {

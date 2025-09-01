@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
+import { clerkClient, getAuth } from "@clerk/express";
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
-import { clerkClient, getAuth } from "@clerk/express";
 
 const getUserProfile = asyncHandler(async(req,res)=>{
    try {
@@ -86,7 +86,7 @@ const followUser = asyncHandler(async(req,res)=>{
 
       const isFollowing = currentUser.following.includes(targetId);
       if (isFollowing){
-        await User.findByIdAndUpdate(currentUser._id, {
+      await User.findByIdAndUpdate(currentUser._id, {
       $pull: { following: targetId },
     });
     await User.findByIdAndUpdate(targetId, {
