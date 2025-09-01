@@ -21,6 +21,10 @@ app.use("/api/posts",PostRouter);
 app.use("/api/comments",commentRouter);
 app.use("/api/notifications",notificationRouter);
 
+app.get("/",(req,res)=>{
+  res.send("hello from route");
+})
+
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
   const status = err.statusCode || err.status || 500;
